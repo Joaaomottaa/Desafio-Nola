@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:usenola.com.br)",
+      "Bash(python -c \"import openpyxl; print\\('openpyxl ok'\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python update_kb.py)",
+      "Bash(del \"c:\\\\Users\\\\N205\\\\Downloads\\\\Desafio Nola\\\\update_kb.py\")",
+      "Bash(python update_kb2.py)"
+    ]
+  }
+}

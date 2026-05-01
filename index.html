@@ -418,149 +418,175 @@ p  { font-size: var(--text-base); color: var(--color-text-secondary); line-heigh
   border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 6px 28px var(--color-primary-glow);
-  transition: transform .2s, box-shadow .2s;
-  position: relative;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+  position: relative; overflow: hidden;
 }
-#chat-toggle:hover { transform: scale(1.07); box-shadow: 0 8px 36px var(--color-primary-glow); }
+#chat-toggle::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.22), transparent 65%);
+  pointer-events: none;
+}
+#chat-toggle:hover { transform: scale(1.08); box-shadow: 0 10px 40px var(--color-primary-glow); }
 .chat-badge {
   position: absolute; top: -3px; right: -3px;
-  background: var(--color-text-primary); color: white;
-  width: 19px; height: 19px; border-radius: 50%;
+  background: #101828; color: white;
+  width: 20px; height: 20px; border-radius: 50%;
   font-size: 10px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid white;
   animation: badgePop .4s cubic-bezier(.34,1.56,.64,1) 1.4s both;
+  z-index: 1;
 }
-:root[data-theme="light"] .chat-badge { background: #101828; }
 @keyframes badgePop { from { transform: scale(0); } to { transform: scale(1); } }
-.toggle-icon { position: absolute; transition: opacity .2s, transform .3s; }
+.toggle-icon { position: absolute; transition: opacity .22s, transform .35s cubic-bezier(.34,1.56,.64,1); }
 #icon-robot { opacity: 1; transform: scale(1) rotate(0deg); }
-#icon-close { opacity: 0; transform: scale(.6) rotate(-45deg); }
-#chat-toggle.open #icon-robot { opacity: 0; transform: scale(.6) rotate(45deg); }
+#icon-close { opacity: 0; transform: scale(.5) rotate(-45deg); }
+#chat-toggle.open #icon-robot { opacity: 0; transform: scale(.5) rotate(45deg); }
 #chat-toggle.open #icon-close { opacity: 1; transform: scale(1) rotate(0deg); }
 
 #chat-window {
-  position: absolute; bottom: 80px; right: 0;
-  width: 420px; height: 600px;
+  position: absolute; bottom: 84px; right: 0;
+  width: 400px; height: 640px;
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 20px 60px rgba(0,0,0,.2), 0 4px 16px rgba(0,0,0,.08);
+  border-radius: 22px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.22), 0 6px 20px rgba(0,0,0,.1);
   display: flex; flex-direction: column; overflow: hidden;
   transform-origin: bottom right;
-  transform: scale(.78) translateY(12px);
+  transform: scale(.78) translateY(16px);
   opacity: 0; pointer-events: none;
-  transition: transform .28s cubic-bezier(.34,1.56,.64,1), opacity .22s;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .22s;
 }
 :root[data-theme="light"] #chat-window { background: #fff; }
 #chat-window.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
 
+/* Chat Header */
 .chat-header {
   background: var(--color-primary-gradient);
-  padding: 13px 15px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  padding: 13px 14px;
+  display: flex; align-items: center; gap: 11px; flex-shrink: 0;
+  position: relative; overflow: hidden;
 }
-.chat-av {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: rgba(255,255,255,.22);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+.chat-header::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 15% 20%, rgba(255,255,255,.14), transparent 60%);
+  pointer-events: none;
 }
-.chat-header-info { flex: 1; }
-.chat-name { color: white; font-size: .92rem; font-weight: 700; letter-spacing: -.01em; }
-.chat-status { color: rgba(255,255,255,.82); font-size: .71rem; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
-.s-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; flex-shrink: 0; animation: blink 2.2s infinite; }
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.45;} }
 .chat-x {
-  background: rgba(255,255,255,.18); border: none; color: white;
-  width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.28);
+  color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background .2s; flex-shrink: 0;
+  transition: background .18s; flex-shrink: 0;
 }
 .chat-x:hover { background: rgba(255,255,255,.32); }
-
-.chat-msgs {
-  flex: 1; overflow-y: auto; padding: 16px;
-  background: var(--color-bg-primary);
-  display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth;
+.chat-av {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.4);
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,.22);
+  background: rgba(255,255,255,.18);
+  display: flex; align-items: center; justify-content: center;
 }
-:root[data-theme="light"] .chat-msgs { background: #F5F5F8; }
-.chat-msgs::-webkit-scrollbar { width: 3px; }
-.chat-msgs::-webkit-scrollbar-thumb { background: var(--color-border-hover); border-radius: 3px; }
+.chat-header-info { flex: 1; }
+.chat-name { color: white; font-size: .95rem; font-weight: 700; letter-spacing: -.01em; }
+.chat-status { color: rgba(255,255,255,.85); font-size: .71rem; display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+.s-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; flex-shrink: 0; animation: blink 2.2s infinite; box-shadow: 0 0 6px rgba(74,222,128,.7); }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+.chat-resp-time { color: rgba(255,255,255,.65); font-size: .68rem; margin-top: 2px; }
 
-.msg { display: flex; align-items: flex-end; gap: 7px; max-width: 88%; animation: msgIn .2s ease-out; }
-@keyframes msgIn { from{opacity:0;transform:translateY(5px);} to{opacity:1;transform:translateY(0);} }
+/* Messages */
+.chat-msgs {
+  flex: 1; overflow-y: auto; padding: 15px 13px;
+  background: var(--color-bg-primary);
+  display: flex; flex-direction: column; gap: 11px; scroll-behavior: smooth;
+}
+:root[data-theme="light"] .chat-msgs { background: #F4F6FA; }
+.chat-msgs::-webkit-scrollbar { width: 4px; }
+.chat-msgs::-webkit-scrollbar-thumb { background: rgba(0,0,0,.12); border-radius: 4px; }
+.chat-msgs::-webkit-scrollbar-track { background: transparent; }
+
+.msg { display: flex; align-items: flex-end; gap: 7px; max-width: 87%; animation: msgIn .22s cubic-bezier(.34,1.56,.64,1); }
+@keyframes msgIn { from{opacity:0;transform:translateY(8px) scale(.95);} to{opacity:1;transform:translateY(0) scale(1);} }
 .msg.bot { align-self: flex-start; }
 .msg.user { align-self: flex-end; flex-direction: row-reverse; }
 .bot-av {
-  width: 26px; height: 26px; border-radius: 50%;
+  width: 28px; height: 28px; border-radius: 50%;
   background: var(--color-primary-gradient);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(253,98,99,.3);
 }
-.bubble { padding: 9px 13px; border-radius: 14px; font-size: .92rem; line-height: 1.55; word-break: break-word; }
+.bubble { padding: 10px 13px; border-radius: 16px; font-size: .9rem; line-height: 1.58; word-break: break-word; }
 .msg.bot .bubble {
   background: var(--color-bg-elevated); color: var(--color-text-primary);
   border: 1px solid var(--color-border); border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
 :root[data-theme="light"] .msg.bot .bubble { background: #fff; }
-.msg.user .bubble { background: var(--color-primary-gradient); color: white; border-bottom-right-radius: 4px; }
-.msg-time { font-size: .63rem; color: var(--color-text-muted); margin-top: 3px; }
+.msg.user .bubble { background: var(--color-primary-gradient); color: white; border-bottom-right-radius: 4px; box-shadow: 0 2px 10px rgba(253,98,99,.28); }
+.msg-time { font-size: .62rem; color: var(--color-text-muted); margin-top: 4px; }
 .msg.bot .msg-wrap .msg-time { text-align: left; }
 .msg.user .msg-wrap .msg-time { text-align: right; }
 .msg-wrap { display: flex; flex-direction: column; }
 
-.typing-row { display: flex; align-items: flex-end; gap: 7px; align-self: flex-start; animation: msgIn .2s ease-out; }
+/* Typing indicator */
+.typing-row { display: flex; align-items: flex-end; gap: 7px; align-self: flex-start; animation: msgIn .22s ease-out; }
 .typing-bub {
   background: var(--color-bg-elevated); border: 1px solid var(--color-border);
-  border-radius: 14px; border-bottom-left-radius: 4px;
-  padding: 11px 14px; display: flex; gap: 4px; align-items: center;
+  border-radius: 16px; border-bottom-left-radius: 4px;
+  padding: 12px 15px; display: flex; gap: 5px; align-items: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
 }
 :root[data-theme="light"] .typing-bub { background: #fff; }
-.td { width: 6px; height: 6px; border-radius: 50%; background: var(--color-text-muted); animation: bounce 1.2s infinite; }
+.td { width: 7px; height: 7px; border-radius: 50%; background: var(--color-primary); opacity: .5; animation: bounce 1.2s infinite; }
 .td:nth-child(2){animation-delay:.15s;} .td:nth-child(3){animation-delay:.3s;}
-@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.35;} 30%{transform:translateY(-5px);opacity:1;} }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.4;} 30%{transform:translateY(-5px);opacity:1;} }
 
+/* Quick replies */
 .quick-wrap {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  padding: 8px 13px 10px;
+  display: flex; flex-wrap: wrap; gap: 7px;
+  padding: 10px 13px 12px;
   background: var(--color-bg-primary);
   border-top: 1px solid var(--color-border);
 }
-:root[data-theme="light"] .quick-wrap { background: #F5F5F8; }
-.qr-hint { width: 100%; font-size: .69rem; color: var(--color-text-muted); font-weight: 500; margin-bottom: 2px; }
+:root[data-theme="light"] .quick-wrap { background: #F4F6FA; }
+.qr-hint { width: 100%; font-size: .67rem; color: var(--color-text-muted); font-weight: 600; margin-bottom: 2px; letter-spacing: .05em; text-transform: uppercase; }
 .qr {
-  background: var(--color-bg-elevated); border: 1px solid var(--color-border);
-  border-radius: var(--radius-full); padding: 5px 11px;
-  font-size: .75rem; font-weight: 500; color: var(--color-text-primary);
+  background: var(--color-bg-elevated); border: 1.5px solid var(--color-border);
+  border-radius: 20px; padding: 6px 12px;
+  font-size: .78rem; font-weight: 500; color: var(--color-text-primary);
   cursor: pointer; font-family: inherit;
-  transition: background .15s, border-color .15s, color .15s; white-space: nowrap;
+  transition: all .18s ease; white-space: nowrap;
 }
 :root[data-theme="light"] .qr { background: #fff; }
-.qr:hover { background: var(--color-primary-subtle); border-color: var(--color-primary); color: var(--color-primary); }
+.qr:hover { background: var(--color-primary-subtle); border-color: var(--color-primary); color: var(--color-primary); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(253,98,99,.15); }
 
+/* Input area */
 .chat-input-row {
-  padding: 10px 12px; background: var(--color-bg-elevated);
+  padding: 10px 11px; background: var(--color-bg-elevated);
   border-top: 1px solid var(--color-border);
   display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
 }
 :root[data-theme="light"] .chat-input-row { background: #fff; }
 #chat-input {
   flex: 1; border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md); padding: 8px 12px;
-  font-size: .84rem; font-family: inherit; resize: none; outline: none;
+  border-radius: 12px; padding: 9px 13px;
+  font-size: .88rem; font-family: inherit; resize: none; outline: none;
   color: var(--color-text-primary); background: var(--color-bg-primary);
-  max-height: 88px; line-height: 1.45; transition: border-color .2s;
+  max-height: 90px; line-height: 1.5; transition: border-color .2s, box-shadow .2s;
 }
-:root[data-theme="light"] #chat-input { background: #F5F5F8; }
-#chat-input:focus { border-color: var(--color-primary); }
+:root[data-theme="light"] #chat-input { background: #F4F6FA; }
+#chat-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(253,98,99,.1); }
 #chat-input::placeholder { color: var(--color-text-muted); }
 #send-btn {
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 38px; height: 38px; border-radius: 50%;
   background: var(--color-primary-gradient); border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: box-shadow .2s, transform .1s; flex-shrink: 0;
+  transition: box-shadow .2s, transform .15s; flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(253,98,99,.4);
 }
-#send-btn:hover { box-shadow: var(--shadow-glow-sm); }
+#send-btn:hover { box-shadow: var(--shadow-glow-sm); transform: scale(1.06); }
 #send-btn:active { transform: scale(.9); }
-#send-btn:disabled { opacity: .5; cursor: not-allowed; }
+#send-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; transform: none; }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
@@ -581,7 +607,8 @@ p  { font-size: var(--text-base); color: var(--color-text-secondary); line-heigh
   .hero__title { font-size: var(--text-4xl); }
   .hero__proof { flex-direction: column; gap: var(--space-4); padding: var(--space-5); margin-top: -40px; width: calc(100% - 24px); }
   .proof-divider { width: 60px; height: 1px; }
-  #chat-window { width: calc(100vw - 32px); }
+  #chat-window { width: calc(100vw - 32px); right: 0; }
+  #chat-widget { bottom: 16px; right: 16px; }
 }
 </style>
 </head>
@@ -764,48 +791,68 @@ p  { font-size: var(--text-base); color: var(--color-text-secondary); line-heigh
   <div id="chat-window">
     <div class="chat-header">
       <div class="chat-av">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="11" width="18" height="10" rx="2"/>
-          <path d="M12 3a2 2 0 0 1 2 2v4H10V5a2 2 0 0 1 2-2z"/>
-          <circle cx="9" cy="16" r="1.2" fill="white" stroke="none"/>
-          <circle cx="15" cy="16" r="1.2" fill="white" stroke="none"/>
-          <line x1="8" y1="7" x2="8" y2="11"/>
-          <line x1="16" y1="7" x2="16" y2="11"/>
+        <svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16.5" y="1" width="3" height="7" rx="1.5" fill="rgba(255,255,255,.85)"/>
+          <circle cx="18" cy="1.5" r="2.5" fill="white"/>
+          <rect x="5" y="8" width="26" height="18" rx="6" fill="rgba(255,255,255,.92)"/>
+          <circle cx="12.5" cy="16" r="4" fill="#FD6263"/>
+          <circle cx="23.5" cy="16" r="4" fill="#FD6263"/>
+          <circle cx="12.5" cy="16" r="2" fill="white"/>
+          <circle cx="23.5" cy="16" r="2" fill="white"/>
+          <circle cx="13.2" cy="15.2" r="0.9" fill="#c0392b"/>
+          <circle cx="24.2" cy="15.2" r="0.9" fill="#c0392b"/>
+          <path d="M12 22 Q18 26.5 24 22" stroke="#FD6263" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+          <rect x="1.5" y="13" width="3.5" height="7" rx="1.75" fill="rgba(255,255,255,.7)"/>
+          <rect x="31" y="13" width="3.5" height="7" rx="1.75" fill="rgba(255,255,255,.7)"/>
         </svg>
       </div>
       <div class="chat-header-info">
         <div class="chat-name">NoLia</div>
         <div class="chat-status"><div class="s-dot"></div>Assistente virtual da Nola</div>
+        <div class="chat-resp-time">Responde em segundos ⚡</div>
       </div>
       <button class="chat-x" onclick="toggleChat()" aria-label="Fechar">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
+
     <div class="chat-msgs" id="chat-msgs"></div>
+
     <div class="quick-wrap" id="quick-wrap">
       <span class="qr-hint">Perguntas frequentes</span>
       <button class="qr" onclick="sendQuick('Quais são os planos e preços?')">💰 Planos e preços</button>
       <button class="qr" onclick="sendQuick('Quais integrações o Nola tem?')">🔗 Integrações</button>
       <button class="qr" onclick="sendQuick('Quanto tempo leva para implementar?')">⏱ Implementação</button>
       <button class="qr" onclick="sendQuick('O Nola integra com iFood e Rappi?')">🛵 iFood e Rappi</button>
+      <button class="qr" onclick="sendQuick('Como funciona o módulo financeiro?')">📊 Financeiro</button>
+      <button class="qr" onclick="sendQuick('Como funciona o PDV do Nola?')">🖥️ PDV</button>
     </div>
+
     <div class="chat-input-row">
       <textarea id="chat-input" placeholder="Digite sua mensagem..." rows="1"
         onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
       <button id="send-btn" onclick="sendMessage()" aria-label="Enviar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
     </div>
   </div>
+
+  <!-- Toggle button -->
   <button id="chat-toggle" onclick="toggleChat()" aria-label="Abrir chat">
     <div class="chat-badge" id="badge">1</div>
-    <svg id="icon-robot" class="toggle-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="11" width="18" height="10" rx="2"/>
-      <path d="M12 3a2 2 0 0 1 2 2v4H10V5a2 2 0 0 1 2-2z"/>
-      <circle cx="9" cy="16" r="1.2" fill="white" stroke="none"/>
-      <circle cx="15" cy="16" r="1.2" fill="white" stroke="none"/>
-      <line x1="8" y1="7" x2="8" y2="11"/>
-      <line x1="16" y1="7" x2="16" y2="11"/>
+    <svg id="icon-robot" class="toggle-icon" width="52" height="52" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="16.5" y="1" width="3" height="7" rx="1.5" fill="rgba(255,255,255,.85)"/>
+      <circle cx="18" cy="1.5" r="2.5" fill="white"/>
+      <rect x="5" y="8" width="26" height="18" rx="6" fill="rgba(255,255,255,.92)"/>
+      <circle cx="12.5" cy="16" r="4" fill="rgba(255,255,255,.35)"/>
+      <circle cx="23.5" cy="16" r="4" fill="rgba(255,255,255,.35)"/>
+      <circle cx="12.5" cy="16" r="2.2" fill="white"/>
+      <circle cx="23.5" cy="16" r="2.2" fill="white"/>
+      <circle cx="13.3" cy="15.1" r="1" fill="rgba(200,60,60,.8)"/>
+      <circle cx="24.3" cy="15.1" r="1" fill="rgba(200,60,60,.8)"/>
+      <path d="M12 22 Q18 26.5 24 22" stroke="rgba(255,255,255,.8)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <rect x="1.5" y="13" width="3.5" height="7" rx="1.75" fill="rgba(255,255,255,.55)"/>
+      <rect x="31" y="13" width="3.5" height="7" rx="1.75" fill="rgba(255,255,255,.55)"/>
     </svg>
     <svg id="icon-close" class="toggle-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
       <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -889,7 +936,7 @@ function toggleChat() {
 
 function now() { return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
 function botAvSVG() {
-  return `<div class="bot-av"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 3a2 2 0 0 1 2 2v4H10V5a2 2 0 0 1 2-2z"/><circle cx="9" cy="16" r="1.2" fill="white" stroke="none"/><circle cx="15" cy="16" r="1.2" fill="white" stroke="none"/></svg></div>`;
+  return `<div class="bot-av"><svg width="18" height="18" viewBox="0 0 36 36" fill="none"><rect x="16.5" y="1" width="3" height="7" rx="1.5" fill="rgba(255,255,255,.85)"/><circle cx="18" cy="1.5" r="2.5" fill="white"/><rect x="5" y="8" width="26" height="18" rx="6" fill="rgba(255,255,255,.92)"/><circle cx="12.5" cy="16" r="4" fill="rgba(255,200,200,.5)"/><circle cx="23.5" cy="16" r="4" fill="rgba(255,200,200,.5)"/><circle cx="12.5" cy="16" r="2.2" fill="white"/><circle cx="23.5" cy="16" r="2.2" fill="white"/><circle cx="13.2" cy="15.2" r="1" fill="rgba(180,50,50,.7)"/><circle cx="24.2" cy="15.2" r="1" fill="rgba(180,50,50,.7)"/><path d="M12 22 Q18 26.5 24 22" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round" fill="none"/><rect x="1.5" y="13" width="3.5" height="7" rx="1.75" fill="rgba(255,255,255,.6)"/><rect x="31" y="13" width="3.5" height="7" rx="1.75" fill="rgba(255,255,255,.6)"/></svg></div>`;
 }
 function addBot(html) {
   html = processLinks(html); 

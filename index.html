@@ -864,7 +864,7 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 
 /* ── Chat Widget ── */
-const WEBHOOK_URL = 'https://noladesafio.app.n8n.cloud/webhook-test/desafionola';
+const WEBHOOK_URL = 'https://noladesafio.app.n8n.cloud/webhook/desafionola';
 
 const SESSION_ID = sessionStorage.getItem('nola-session') || (() => {
   const id = crypto.randomUUID();

@@ -865,6 +865,13 @@ document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 
 /* ── Chat Widget ── */
 const WEBHOOK_URL = 'https://noladesafio.app.n8n.cloud/webhook-test/desafionola';
+
+const SESSION_ID = sessionStorage.getItem('nola-session') || (() => {
+  const id = crypto.randomUUID();
+  sessionStorage.setItem('nola-session', id);
+  return id;
+})();
+
 let chatOpen = false, firstMsg = true;
 const msgsEl = document.getElementById('chat-msgs');
 const inputEl = document.getElementById('chat-input');
@@ -936,7 +943,7 @@ async function sendMessage() {
   document.getElementById('send-btn').disabled = true;
   addUser(text); showTyping();
   try {
-    const res = await fetch(WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:text, timestamp:new Date().toISOString()}) });
+    const res = await fetch(WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message:text, sessionId:SESSION_ID, timestamp:new Date().toISOString()}) });
     hideTyping();
     if (res.ok) {
       const data = await res.json();
